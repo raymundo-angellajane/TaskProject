@@ -1,0 +1,3 @@
+- [x] Remove duplicate dashboard route in routes/web.php
+- [x] Fix stats key in DashboardController.php from 'completeTasks' to 'completedTasks'
+- [ ] Test the dashboard by running the server
