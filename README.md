@@ -30,6 +30,17 @@ This project provides a starter kit for managing tasks and lists with a clean UI
 
 ##  Installation
 
+Installing Laravel Project:
+
+To create a new Laravel project with React as the starter kit:
+laravel new name_of_project
+
+Starter kit: react
+
+Authentication provider: laravel
+
+Testing framework: Pest
+
 Install dependencies:
 
 ```bash
