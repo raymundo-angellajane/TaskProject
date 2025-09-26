@@ -30,12 +30,9 @@ This project provides a starter kit for managing tasks and lists with a clean UI
 
 ##  Installation
 
-Clone the repo and install dependencies:
+Install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/laravel-task-manager.git
-cd laravel-task-manager
-
 # Install PHP dependencies
 composer install
 
