@@ -14,6 +14,11 @@ interface Props {
     completedTasks: number;
     pendingTasks: number;
   };
+  recentActivities?: Array<{
+    type: 'list' | 'task';
+    title: string;
+    created_at: string;
+  }>;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -30,6 +35,7 @@ export default function Dashboard({
     completedTasks: 0,
     pendingTasks: 0,
   },
+  recentActivities = [],
 }: Props) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -144,17 +150,39 @@ export default function Dashboard({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    <Plus className="h-4 w-4 text-primary" />
+                {recentActivities.length > 0 ? (
+                  recentActivities.map((activity, index) => (
+                    <div key={index} className="flex items-center gap-4">
+                      <div className="rounded-full bg-primary/10 p-2">
+                        {activity.type === 'list' ? (
+                          <List className="h-4 w-4 text-primary" />
+                        ) : (
+                          <CheckCircle className="h-4 w-4 text-primary" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {activity.type === 'list' ? 'Created list' : 'Created task'}: {activity.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(activity.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <div className="rounded-full bg-primary/10 p-2">
+                      <Plus className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Welcome to Task Manager</p>
+                      <p className="text-xs text-muted-foreground">
+                        Get started by creating your first list or task
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium">Welcome to Task Manager</p>
-                    <p className="text-xs text-muted-foreground">
-                      Get started by creating your first list or task
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </CardContent>
           </Card>

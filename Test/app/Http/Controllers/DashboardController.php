@@ -25,11 +25,44 @@ class DashboardController extends Controller
             'completedTasks'=> $tasks->where('is_completed',true)->count(),
             'pendingTasks'=> $tasks->where('is_completed',false)->count(),
         ];
+
+        // Fetch recent activities: last 5 lists and tasks combined, sorted by created_at desc
+        $recentLists = TaskList::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function ($list) {
+                return [
+                    'type' => 'list',
+                    'title' => $list->title,
+                    'created_at' => $list->created_at->format('Y-m-d H:i:s'),
+                ];
+            });
+
+        $recentTasks = Task::whereHas('list', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function ($task) {
+                return [
+                    'type' => 'task',
+                    'title' => $task->title,
+                    'created_at' => $task->created_at->format('Y-m-d H:i:s'),
+                ];
+            });
+
+        $recentActivities = $recentLists->concat($recentTasks)
+            ->sortByDesc('created_at')
+            ->take(5)
+            ->values();
+
         return Inertia::render('dashboard', [
             'stats' => $stats,
             'lists' => $lists,
             'tasks' => $tasks,
-            
+            'recentActivities' => $recentActivities,
             'flash' =>[
                 'success'=>session('success'),
                 'error'=>session('error')
