@@ -30,12 +30,20 @@ This project provides a starter kit for managing tasks and lists with a clean UI
 
 ##  Installation
 
-Clone the repo and install dependencies:
+Installing Laravel Project:
+
+To create a new Laravel project with React as the starter kit:
+laravel new name_of_project
+
+Starter kit: react
+
+Authentication provider: laravel
+
+Testing framework: Pest
+
+Install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/laravel-task-manager.git
-cd laravel-task-manager
-
 # Install PHP dependencies
 composer install
 
