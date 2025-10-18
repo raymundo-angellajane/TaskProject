@@ -307,9 +307,8 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
         </div>
 
         {/* Table */}
-        <div className="rounded-md border">
-          <div className="relative w-full overflow-auto">
-            <table className="w-full caption-bottom text-sm">
+        <div className="rounded-md border overflow-x-auto">
+          <table className="w-full min-w-[600px] caption-bottom text-sm">
               <thead className="[&>tr]:border-b">
                 <tr className="border-b">
                   <th className="h-12 px-4 text-left">Title</th>
@@ -418,7 +417,6 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
             </Button>
           </div>
         </div>
-      </div>
     </AppLayout>
   );
 }

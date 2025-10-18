@@ -165,7 +165,7 @@ export default function ListsIndex({ lists, flash }: Props) {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-muted-foreground break-words">
                                     {list.description || 'No description'}
                                 </p>
                                 {list.tasks_count !== undefined && (
