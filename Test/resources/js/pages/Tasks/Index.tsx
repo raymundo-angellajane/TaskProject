@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 
 interface Task {
   id: number;
@@ -62,6 +63,9 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
   const [completionFilter, setCompletionFilter] = useState<
     'all' | 'completed' | 'incomplete'
   >(filters.filter as 'all' | 'completed' | 'incomplete');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   useEffect(() => {
     if (flash?.success) {
@@ -94,18 +98,7 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editingTask) {
-       put(`/tasks/${editingTask.id}`, {
-        onSuccess: () => {
-          setIsOpen(false);
-          reset();
-          setEditingTask(null);
-        },
-        onError: (errors) => {
-          setToastMessage('Failed to update task. Please check the form.');
-          setToastType('error');
-          setShowToast(true);
-        },
-      });
+      setUpdateDialogOpen(true);
     } else {
       post('/tasks', {
         onSuccess: () => {
@@ -121,6 +114,23 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
     }
   };
 
+  const confirmUpdate = () => {
+    put(`/tasks/${editingTask!.id}`, {
+      onSuccess: () => {
+        setIsOpen(false);
+        reset();
+        setEditingTask(null);
+        setUpdateDialogOpen(false);
+      },
+      onError: (errors) => {
+        setToastMessage('Failed to update task. Please check the form.');
+        setToastType('error');
+        setShowToast(true);
+        setUpdateDialogOpen(false);
+      },
+    });
+  };
+
   const handleEdit = (task: Task) => {
     setEditingTask(task);
     setData({
@@ -134,7 +144,26 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
   };
 
   const handleDelete = (taskId: number) => {
-    destroy(`/tasks/${taskId}`);
+    setTaskToDelete(taskId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (taskToDelete) {
+      destroy(`/tasks/${taskToDelete}`, {
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setTaskToDelete(null);
+        },
+        onError: () => {
+          setToastMessage('Failed to delete task.');
+          setToastType('error');
+          setShowToast(true);
+          setDeleteDialogOpen(false);
+          setTaskToDelete(null);
+        },
+      });
+    }
   };
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -417,6 +446,25 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
             </Button>
           </div>
         </div>
+
+        {/* Confirmation Dialogs */}
+        <ConfirmationDialog
+          open={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
+          title="Confirm Update"
+          description="Are you sure you want to update this task?"
+          onConfirm={confirmUpdate}
+          confirmText="Update"
+        />
+
+        <ConfirmationDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          title="Confirm Delete"
+          description="Are you sure you want to delete this task?"
+          onConfirm={confirmDelete}
+          confirmText="Delete"
+        />
     </AppLayout>
   );
 }

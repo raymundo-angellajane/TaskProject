@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import { store, update, destroy as listDestroy } from '@/routes/lists';
+import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 
 interface Lists {
     id: number;
@@ -37,6 +38,8 @@ export default function ListsIndex({ lists, flash }: Props) {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [listToDelete, setListToDelete] = useState<number | null>(null);
 
     useEffect(() => {
         if (flash?.success) {
@@ -92,7 +95,26 @@ export default function ListsIndex({ lists, flash }: Props) {
     };
 
     const handleDelete = (listId: number) => {
-        destroy(listDestroy(listId).url);
+        setListToDelete(listId);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (listToDelete) {
+            destroy(listDestroy(listToDelete).url, {
+                onSuccess: () => {
+                    setDeleteDialogOpen(false);
+                    setListToDelete(null);
+                },
+                onError: () => {
+                    setToastMessage('Failed to delete list.');
+                    setToastType('error');
+                    setShowToast(true);
+                    setDeleteDialogOpen(false);
+                    setListToDelete(null);
+                },
+            });
+        }
     };
 
     return (
@@ -177,6 +199,16 @@ export default function ListsIndex({ lists, flash }: Props) {
                         </Card>
                     ))}
                 </div>
+
+                {/* Confirmation Dialog */}
+                <ConfirmationDialog
+                    open={deleteDialogOpen}
+                    onOpenChange={setDeleteDialogOpen}
+                    title="Confirm Delete"
+                    description="Are you sure you want to delete this list?"
+                    onConfirm={confirmDelete}
+                    confirmText="Delete"
+                />
             </div>
         </AppLayout>
     );
