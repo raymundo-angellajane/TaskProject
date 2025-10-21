@@ -69,7 +69,7 @@ export default function Welcome() {
                             alt="Tickora Logo"
                             className="h-8 w-8 object-contain"
                         />
-                        <span className="text- font-semibold text-[#0D6EFD] dark:text-[#4CC9F0]">Tickora</span>
+                        <span className="text-2xl font-semibold text-[#0D6EFD] dark:text-[#4CC9F0]">Tickora</span>
                     </div>
 
                     <nav className="flex items-center gap-6 text-sm font-medium">
