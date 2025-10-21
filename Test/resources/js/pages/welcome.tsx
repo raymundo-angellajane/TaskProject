@@ -90,16 +90,39 @@ export default function Welcome() {
                 </header>
 
                 {/* Hero Section */}
-                <section id="hero" className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#0D6EFD] via-[#4CC9F0] to-[#ADE8F4] px-6 text-center text-white">
-                    <h1 className="mb-4 text-4xl font-bold leading-tight sm:text-5xl">Organize Your Tasks with Tickora</h1>
+                <section
+                    id="hero"
+                    className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 px-6 text-center text-white"
+                >
+                    {/* Floating Tickora Logo on the very right */}
+                    <img
+                        src="/Tickora-logo.png"
+                        alt="Tickora Floating Logo"
+                        className="absolute right-[-50px] bottom-20 h-100 w-100 opacity-25 animate-float-slow select-none pointer-events-none"
+                    />
+
+                    <h1 className="mb-4 text-4xl font-bold leading-tight sm:text-5xl">
+                        Organize Your Tasks with Tickora
+                    </h1>
                     <p className="mb-8 max-w-2xl text-base font-light text-white/90 sm:text-lg">
                         Streamline your day with Tickora — the all-in-one task and list manager designed to help you stay productive, focused, and stress-free.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Link href={register()} className="rounded-full bg-white px-6 py-2 font-medium text-[#0D6EFD] shadow-md transition hover:bg-[#f0f0f0]">Get Started</Link>
-                        <a href="#features" className="rounded-full border border-white px-6 py-2 font-medium text-white transition hover:bg-white/10">Explore Features</a>
+                        <Link
+                            href={register()}
+                            className="rounded-full bg-white px-6 py-2 font-medium text-[#0D6EFD] shadow-md transition hover:bg-[#f0f0f0]"
+                        >
+                            Get Started
+                        </Link>
+                        <a
+                            href="#features"
+                            className="rounded-full border border-white px-6 py-2 font-medium text-white transition hover:bg-white/10"
+                        >
+                            Explore Features
+                        </a>
                     </div>
                 </section>
+
 
                 {/* Features Section */}
                 <section id="features" className="bg-[#F9FAFB] px-6 py-20 text-center dark:bg-[#111]">
